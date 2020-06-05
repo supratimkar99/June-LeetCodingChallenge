@@ -1,0 +1,61 @@
+//Given an array w of positive integers, where w[i] describes the weight of index i, 
+//write a function pickIndex which randomly picks an index in proportion to its weight.
+
+//w[i] specifies weight of index i
+//i.e. probability of index i to be generated pseudo-randomly
+class Solution
+{
+    static int w_cum[],sum;
+    //we store weight of each index as a cumulative weight 
+    //where weight of an index 'i' is specified by w_cum[i] - w_cum[i-1]
+    //If we randomly compute a number we can easily determine, which cum_weight it comes under.
+    public Solution(int[] w)
+    {
+        int c=0;
+        sum = 0;
+        w_cum = new int[w.length];
+        for(int i : w)
+        {
+            sum += i;
+            w_cum[c++] = sum; //calculating cumulative weight
+            //if w[0]=1 & w[1]=4 then w_cum[0]=1 && w_cum[1]=5
+        }
+    }
+    
+    public int pickIndex()
+    {
+        int rand = (int)(Math.random() * sum); 
+        //Math.random returns a fractional value between 0 and 1
+        //So multiplying it with sum gives us a value between 0 and sum
+        
+        return binsrc(rand + 1); //determines which index the random number falls under ( based on w[] )
+        //+1 -> since cumulative weight starts with 1 and not 0
+    }
+    
+    public static int binsrc(int k)
+    {
+        int l = 0, h = w_cum.length-1, m;
+        while(l<h)
+        {
+            m = l + (h-l)/2 ;
+            if(w_cum[m] == k)
+                return m;
+            if(w_cum[m] < k)
+                l = m + 1;
+            else
+                h = m; 
+        // h=m and not (m-1) reason-> cumulative array -> if m=2 & w_cum[m]=8 and w_cum[m-1]=5 and k=6
+        // k(=6) lies in range 5-8 of w_cum[m(=2)], so if h = m-1 then we lose the correct index
+                
+        }
+        
+        return l; //since for search unsuccessful case, we end at the index with the next greater value of key 
+        //so l is the index with the range containing key
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(w);
+ * int param_1 = obj.pickIndex();
+ */
