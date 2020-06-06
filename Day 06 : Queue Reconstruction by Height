@@ -1,0 +1,46 @@
+//Suppose you have a random list of people standing in a queue. Each person is described by a pair of integers (h, k), 
+//where h is the height of the person and k is the number of people in front of this person who have a height greater than or equal to h. 
+//Write an algorithm to reconstruct the queue.
+
+class Solution {
+    public int[][] reconstructQueue(int[][] people)
+    {
+        //sorting based on height, if equal then sorts based on position in desc order
+        Arrays.sort(people, new Comparator<int[]>(){
+            
+            @Override
+            public int compare(int[] entry1 , int[] entry2)
+            {
+                if(entry1[0] == entry2[0])
+                {
+                    return ( entry1[1] - entry2[1] );
+                }
+                return ( entry2[0] - entry1[0] );
+            }
+            
+        });
+        
+        int[] t = new int[2];
+        
+        for(int ind=0; ind<people.length; ind++)
+        {
+            int i = ind; 
+            
+            //since we already sorted it in descending order of height,
+            //so index of a person specifies number of taller or same height person infront of him.
+            //so we just swap adjacent elements till the person in Qn reaches the index,
+            //where index = number of person infront of him (i.e. i = p)
+            
+            while(people[i][1] < i)
+            {
+                t = people[i];
+                people[i] = people[i-1];
+                people[i-1] = t;
+                
+                i--;
+            }
+        }
+        
+        return people;
+    }
+}
