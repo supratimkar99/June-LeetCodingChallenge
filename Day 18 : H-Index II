@@ -5,6 +5,10 @@
 
 //If there are several possible values for h, the maximum one is taken as the h-index.
 
+/*
+Approach : Searching the index which satisfies the condition using modified binary search.
+If there are more than A[i] citations on a minimum of A[i] papers, then A[i] is the answer.
+*/
 class Solution
 {
     public int hIndex(int[] citations)
