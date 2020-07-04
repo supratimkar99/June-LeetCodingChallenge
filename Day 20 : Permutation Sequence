@@ -1,0 +1,46 @@
+//PROBLEM STATEMENT
+/*
+The set [1,2,3,...,n] contains a total of n! unique permutations.
+By listing and labeling all of the permutations in order, we get the following sequence for n = 3:
+
+1. "123"
+2. "132"
+3. "213"
+4. "231"
+5. "312"
+6. "321"
+
+Given n and k, return the kth permutation sequence.
+*/
+
+//SOLUTION
+class Solution 
+{
+    public String getPermutation(int n, int k)
+    {
+        int fac[] = new int[n+1], index=0;
+        List<Integer> digits = new ArrayList();   //to keep track of the last remaining digit
+        for(int i=1; i<=n; i++)
+            digits.add(i);
+        
+        fac[1] = 1;
+        for(int i=2; i<=n; i++)
+            fac[i] = i * fac[i-1];
+            
+        StringBuffer sb = new StringBuffer();
+        while(digits.size() > 1)
+        {
+            index = (k-1)/fac[n-1];       //k-1 because k = 6 / fac[3] will give index 1 otherwise 
+            sb.append(digits.get(index));
+            digits.remove(index);
+        
+            k = k % fac[n-1];
+            if(k == 0)
+                k = fac[n-1];      //k=0 is same as k=fac[n-1], hence later is used to avoid calculation error
+            n--;
+            
+        }
+        sb.append(digits.get(0));
+        return sb.toString();
+    }
+}
